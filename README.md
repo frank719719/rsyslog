@@ -98,11 +98,15 @@ end
 Что тут происходит:
 - С помошью `sed` расскоментируем строки с конфигом где настраиваются порты tcp и udp для приема логов.
 - С помошью `echo` в конец файла `/etc/rsyslog.conf` добавляем правила приёма сообщений от хостов:
+```shell
+echo "\$template RemoteLogs,\"/var/log/rsyslog/%HOSTNAME%/%PROGRAMNAME%.log\"" >> /etc/rsyslog.conf
+          echo "*.* ?RemoteLogs" >> /etc/rsyslog.conf
+          echo "& ~" >> /etc/rsyslog.conf
+```
 Данные параметры будут отправлять в папку `/var/log/rsyslog` логи, которые будут приходить от других
 серверов. Например, Access-логи nginx от сервера `web`, будут идти в файл
 `/var/log/rsyslog/web/nginx_access.log`
 - Далее перезапускаем службу rsyslog.
-
 ## Готовый vagrantfile
 
 ```shell
